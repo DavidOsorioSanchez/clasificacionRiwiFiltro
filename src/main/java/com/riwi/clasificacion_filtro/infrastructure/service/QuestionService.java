@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class QuestionService implements IQuestion{
+public class QuestionService implements IQuestion {
 
   @Autowired
   private final QuestionRepository questionRepository;
@@ -31,9 +31,9 @@ public class QuestionService implements IQuestion{
   public Page<BasicQuestionResp> getAll(int page, int size) {
     if (page < 0)
       page = 0;
-      PageRequest pagination = PageRequest.of(page, size);
-        return this.questionRepository.findAll(pagination)
-          .map(this::entityToRespBasic);
+    PageRequest pagination = PageRequest.of(page, size);
+    return this.questionRepository.findAll(pagination)
+        .map(this::entityToRespBasic);
   }
 
   @Override
@@ -56,14 +56,14 @@ public class QuestionService implements IQuestion{
 
   @Override
   public void patch(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'patch'");
+    this.questionRepository.delete(this.find(id));
   }
-  
-  private Question find(Long id){
-    return this.questionRepository.findById(id).orElseThrow(() -> new BadRequestException(ErrorMessages.idNotFound("Question")));
+
+  private Question find(Long id) {
+    return this.questionRepository.findById(id)
+        .orElseThrow(() -> new BadRequestException(ErrorMessages.idNotFound("Question")));
   }
-  
+
   private BasicQuestionResp entityToRespBasic(Question entity) {
 
     return BasicQuestionResp.builder()
@@ -76,9 +76,8 @@ public class QuestionService implements IQuestion{
 
   private QuestionResp entityToResp(Question entity) {
 
-
-      SubweyResp subwey = new SubweyResp();
-        BeanUtils.copyProperties(entity.getSubwey(), subwey);
+    SubweyResp subwey = new SubweyResp();
+    BeanUtils.copyProperties(entity.getSubwey(), subwey);
 
     return QuestionResp.builder()
         .id(entity.getId())
