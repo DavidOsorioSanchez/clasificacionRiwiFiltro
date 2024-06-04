@@ -11,7 +11,9 @@ import com.riwi.clasificacion_filtro.api.dto.response.BasicQuestionResp;
 import com.riwi.clasificacion_filtro.api.dto.response.QuestionResp;
 import com.riwi.clasificacion_filtro.api.dto.response.SubweyResp;
 import com.riwi.clasificacion_filtro.domain.entities.Question;
+import com.riwi.clasificacion_filtro.domain.entities.Subwey;
 import com.riwi.clasificacion_filtro.domain.repository.QuestionRepository;
+import com.riwi.clasificacion_filtro.domain.repository.SubweyRepository;
 import com.riwi.clasificacion_filtro.infrastructure.CrudAbstract.IQuestion;
 import com.riwi.clasificacion_filtro.util.exception.BadRequestException;
 import com.riwi.clasificacion_filtro.util.messages.ErrorMessages;
@@ -22,18 +24,21 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class QuestionService implements IQuestion{
+public class QuestionService implements IQuestion {
 
   @Autowired
   private final QuestionRepository questionRepository;
+
+  @Autowired
+  private final SubweyRepository subweyRepository;
 
   @Override
   public Page<BasicQuestionResp> getAll(int page, int size) {
     if (page < 0)
       page = 0;
-      PageRequest pagination = PageRequest.of(page, size);
-        return this.questionRepository.findAll(pagination)
-          .map(this::entityToRespBasic);
+    PageRequest pagination = PageRequest.of(page, size);
+    return this.questionRepository.findAll(pagination)
+        .map(this::entityToRespBasic);
   }
 
   @Override
@@ -43,15 +48,17 @@ public class QuestionService implements IQuestion{
   }
 
   @Override
-  public QuestionReq update(QuestionResp request, Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+  public QuestionResp update(QuestionReq request, Long id) {
+    Question question = this.find(id);
+    question.setId(id);
+
+    return this.entityToResp(this.questionRepository.save(question));
+
   }
 
   @Override
   public void delete(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    this.questionRepository.delete(this.find(id));
   }
 
   @Override
@@ -59,11 +66,12 @@ public class QuestionService implements IQuestion{
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'patch'");
   }
-  
-  private Question find(Long id){
-    return this.questionRepository.findById(id).orElseThrow(() -> new BadRequestException(ErrorMessages.idNotFound("Question")));
+
+  private Question find(Long id) {
+    return this.questionRepository.findById(id)
+        .orElseThrow(() -> new BadRequestException(ErrorMessages.idNotFound("Question")));
   }
-  
+
   private BasicQuestionResp entityToRespBasic(Question entity) {
 
     return BasicQuestionResp.builder()
@@ -76,9 +84,8 @@ public class QuestionService implements IQuestion{
 
   private QuestionResp entityToResp(Question entity) {
 
-
-      SubweyResp subwey = new SubweyResp();
-        BeanUtils.copyProperties(entity.getSubwey(), subwey);
+    SubweyResp subwey = new SubweyResp();
+    BeanUtils.copyProperties(entity.getSubwey(), subwey);
 
     return QuestionResp.builder()
         .id(entity.getId())

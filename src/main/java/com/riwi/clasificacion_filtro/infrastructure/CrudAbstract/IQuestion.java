@@ -12,7 +12,7 @@ public interface IQuestion {
 
   public Page<BasicQuestionResp> getAll(int page, int size);
 
-  public QuestionReq update(QuestionResp request, Long id);
+  public QuestionResp update(QuestionReq request, Long id);
 
   public void delete(Long id);
 
