@@ -1,5 +1,7 @@
 package com.riwi.clasificacion_filtro.infrastructure.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,8 +37,8 @@ public class UserService implements IUser{
 
   @Override
   public UserResp create(UserReq request) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'create'");
+    User user = this.requestToEntity(request);
+        return this.entityToResp(this.userRepositoty.save(user));
   }
 
   @Override
