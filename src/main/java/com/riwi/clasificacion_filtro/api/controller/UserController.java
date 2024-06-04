@@ -22,11 +22,10 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 public class UserController {
+  @Autowired
   private final IUser userService;
 
   @GetMapping
-  public ResponseEntity<Page<UserResp>> getAll(@RequestParam(defaultValue = "1") int page,
-      @RequestParam(defaultValue = "10") int size) {
   public ResponseEntity<Page<UserResp>> getAll(@RequestParam(defaultValue = "1") int page,
       @RequestParam(defaultValue = "10") int size) {
     return ResponseEntity.ok(this.userService.getAll(page, size));
