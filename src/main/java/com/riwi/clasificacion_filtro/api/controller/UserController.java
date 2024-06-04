@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,15 +31,24 @@ public class UserController {
       @RequestParam(defaultValue = "10") int size) {
     return ResponseEntity.ok(this.userService.getAll(page, size));
   }
-  
-  @GetMapping(path = "/{id}")
-    public ResponseEntity<UserResp> get(
-            @PathVariable Long id) {
-        return ResponseEntity.ok(this.userService.get(id));
-    }
+
+  @GetMapping(path="/{id}")
+
+  public ResponseEntity<UserResp> get(
+      @PathVariable Long id) {
+    return ResponseEntity.ok(this.userService.get(id));
+  }
 
   @PostMapping
   public ResponseEntity<UserResp> insert(@Validated @RequestBody UserReq request) {
     return ResponseEntity.ok(this.userService.create(request));
   }
+
+  @PutMapping(path = "/{id}")
+    public ResponseEntity<UserResp> update(
+            @Validated @RequestBody UserReq request,
+            @PathVariable Long id) {
+        return ResponseEntity.ok(this.userService.update(request, id));
+    }
+  
 }

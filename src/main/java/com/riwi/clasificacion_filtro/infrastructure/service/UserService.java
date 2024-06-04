@@ -48,8 +48,11 @@ public class UserService implements IUser{
 
   @Override
   public UserResp update(UserReq request, Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+
+    User userUp = this.requestToEntity(request);
+    userUp.setId(id);
+
+    return this.entityToResp(this.userRepositoty.save(userUp));
   }
   
   private User find(Long id){
