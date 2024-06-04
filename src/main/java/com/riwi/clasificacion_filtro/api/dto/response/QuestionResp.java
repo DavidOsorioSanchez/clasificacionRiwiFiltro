@@ -13,6 +13,7 @@ public class QuestionResp {
   private Long id;
   private String text;
   private String type;
+  private boolean active;
 
   private SubweyResp subwey;
 }
