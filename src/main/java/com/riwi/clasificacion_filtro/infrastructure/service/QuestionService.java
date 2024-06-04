@@ -11,7 +11,9 @@ import com.riwi.clasificacion_filtro.api.dto.response.BasicQuestionResp;
 import com.riwi.clasificacion_filtro.api.dto.response.QuestionResp;
 import com.riwi.clasificacion_filtro.api.dto.response.SubweyResp;
 import com.riwi.clasificacion_filtro.domain.entities.Question;
+import com.riwi.clasificacion_filtro.domain.entities.Subwey;
 import com.riwi.clasificacion_filtro.domain.repository.QuestionRepository;
+import com.riwi.clasificacion_filtro.domain.repository.SubweyRepository;
 import com.riwi.clasificacion_filtro.infrastructure.CrudAbstract.IQuestion;
 import com.riwi.clasificacion_filtro.util.exception.BadRequestException;
 import com.riwi.clasificacion_filtro.util.messages.ErrorMessages;
@@ -27,6 +29,9 @@ public class QuestionService implements IQuestion {
   @Autowired
   private final QuestionRepository questionRepository;
 
+  @Autowired
+  private final SubweyRepository subweyRepository;
+
   @Override
   public Page<BasicQuestionResp> getAll(int page, int size) {
     if (page < 0)
@@ -38,7 +43,13 @@ public class QuestionService implements IQuestion {
 
   @Override
   public QuestionResp create(QuestionReq request) {
+
+    Subwey subwey = this.subweyRepository.findById(request.getSubweyId())
+        .orElseThrow(() -> new BadRequestException(ErrorMessages.idNotFound("subwey")));
+
     Question question = this.requestToEntity(request);
+
+    question.setSubwey(subwey);
     return this.entityToResp(this.questionRepository.save(question));
   }
 
