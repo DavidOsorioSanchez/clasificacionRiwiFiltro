@@ -1,6 +1,5 @@
 package com.riwi.clasificacion_filtro.domain.entities;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -30,7 +29,7 @@ public class Subwey {
   private Long id;
   private String title;
   private String description;
-  private LocalDate creationDate;
+  private String creationDate;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id",referencedColumnName = "id")

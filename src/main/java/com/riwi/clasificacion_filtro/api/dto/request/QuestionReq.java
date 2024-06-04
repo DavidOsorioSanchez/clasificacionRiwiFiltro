@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class QuestionReq {
   private String text;
   private String type;
+  private boolean active;
 
   private Long subweyId;
 }

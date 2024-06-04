@@ -1,6 +1,5 @@
 package com.riwi.clasificacion_filtro.api.dto.response;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubweyResp {
+public class BasicQuestionResp {
   private Long id;
-  private String title;
-  private String description;
-  private String creationDate;
-  
-  private UserResp user;
+  private String text;
+  private String type;
+  private boolean active;
+
 }
